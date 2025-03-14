@@ -1,3 +1,4 @@
+'''This module is for create a server response whit flask'''
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -5,8 +6,12 @@ app = Flask("Emotion Detector")
 
 @app.route("/emotionDetector")
 def sent_detector():
+    '''this function makes the request to principal funtion'''
     text_to_analyze = request.args.get('textToAnalyze')
     response = emotion_detector(text_to_analyze)
+    if response['dominant_emotion'] is None:
+        return "Invalid text! Please try again!."
+
     anger = response['anger']
     disgust = response['disgust']
     fear = response['fear']
@@ -19,6 +24,7 @@ def sent_detector():
 
 @app.route("/")
 def render_index_page():
+    '''this fundtion desplace the prinicpal html'''
     return render_template('index.html')
 
 if __name__ == "__main__":
